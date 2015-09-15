@@ -110,13 +110,13 @@ public class UUIDServlet extends HttpServlet
 
 			if ( key == null || !key.equals( UUIDServletConfig.password ) ) {
 				response.setStatus( 401 );
-				response.getOutputStream().print( "\"error\": \"You are unauthorised to be here.\" }" );
+				response.getOutputStream().print( "{\"error\": \"You are unauthorised to be here.\" }" );
 				return;
 			}
 
 			if ( uuid == null || name == null ) {
 				response.setStatus( 400 );
-				response.getOutputStream().print( "\"error\": \"Name and UUID are not set. You may wish to have the reason and profile aswell.\" }" );
+				response.getOutputStream().print( "{\"error\": \"Name and UUID are not set. You may wish to have the reason and profile aswell.\" }" );
 				return;
 			}
 
