@@ -121,6 +121,12 @@ public class UUIDServlet extends HttpServlet
 
 			uuid = uuid.replace( "-", "" );
 			this.users.put( uuid, new User( name, uuid, profile, reason ) );
+
+			BufferedWriter bw = new BufferedWriter( new FileWriter( UUIDServletConfig.dataLocation ) );
+			bw.write( pretty_gson.toJson( this.users ) );
+			bw.flush();
+			bw.close();
+
 			return;
 
 		}
