@@ -1,8 +1,8 @@
 package co.ryred.uuidservlet;
 
-import com.google.common.base.Throwables;
 import co.ryred.uuidservlet.configuration.InvalidConfigurationException;
 import co.ryred.uuidservlet.configuration.file.YamlConfiguration;
+import com.google.common.base.Throwables;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 

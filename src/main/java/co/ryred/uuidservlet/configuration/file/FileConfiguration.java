@@ -1,10 +1,10 @@
 package co.ryred.uuidservlet.configuration.file;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import co.ryred.uuidservlet.configuration.Configuration;
 import co.ryred.uuidservlet.configuration.InvalidConfigurationException;
 import co.ryred.uuidservlet.configuration.MemoryConfiguration;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.apache.commons.lang.Validate;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 

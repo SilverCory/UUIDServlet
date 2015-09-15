@@ -31,12 +31,13 @@ public class UUIDServlet extends HttpServlet
 
 		UUIDServletConfig.init();
 
-		if( UUIDServletConfig.dataLocation.exists() ) {
+		if ( UUIDServletConfig.dataLocation.exists() ) {
 
-			Type listType = new TypeToken<HashMap<String, User>>(){}.getType();
-			this.users = gson.fromJson( new FileReader( UUIDServletConfig.dataLocation ), listType);
+			Type listType = new TypeToken<HashMap<String, User>>() {}.getType();
+			this.users = gson.fromJson( new FileReader( UUIDServletConfig.dataLocation ), listType );
 
-		} else {
+		}
+		else {
 
 			this.users = new HashMap<String, User>();
 
@@ -107,13 +108,13 @@ public class UUIDServlet extends HttpServlet
 			String reason = request.getParameter( "reason" );
 			String profile = request.getParameter( "profile" );
 
-			if( key == null || !key.equals( UUIDServletConfig.password ) ) {
+			if ( key == null || !key.equals( UUIDServletConfig.password ) ) {
 				response.setStatus( 401 );
 				response.getOutputStream().print( "\"error\": \"You are unauthorised to be here.\" }" );
 				return;
 			}
 
-			if( uuid == null || name == null ) {
+			if ( uuid == null || name == null ) {
 				response.setStatus( 400 );
 				response.getOutputStream().print( "\"error\": \"Name and UUID are not set. You may wish to have the reason and profile aswell.\" }" );
 				return;
@@ -132,9 +133,10 @@ public class UUIDServlet extends HttpServlet
 		}
 
 		response.setStatus( 200 );
-		if( request.getParameter( "min" ) != null ) {
+		if ( request.getParameter( "min" ) != null ) {
 			response.getOutputStream().print( gson.toJson( this.users ) );
-		} else {
+		}
+		else {
 			response.getOutputStream().print( "#Well, this is all my baes and people that deserve recognition as well as me.\n" );
 			response.getOutputStream().print( pretty_gson.toJson( this.users ) );
 		}
