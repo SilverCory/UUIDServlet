@@ -8,6 +8,7 @@
     <servlet>
         <servlet-name>UUIDServlet</servlet-name>
         <servlet-class>co.ryred.uuidservlet.UUIDServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
     </servlet>
 
     <servlet-mapping>
