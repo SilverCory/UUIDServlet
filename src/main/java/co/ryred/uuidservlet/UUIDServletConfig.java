@@ -31,6 +31,7 @@ public class UUIDServletConfig
 	public static File goodFile;
 	public static File badFile;
 	public static File unstableFile;
+	public static File sexyFile;
 	public static File statusConfigFile;
 	static int version;
 	private static boolean initted = false;
@@ -205,16 +206,22 @@ public class UUIDServletConfig
 	{
 
 		if ( version < 2 ) {
-			Logger.getRootLogger().log( Level.FATAL, "Oudated config, config is not configured!" );
+			Logger.getRootLogger().log( Level.FATAL, "Oudated config, status config is not configured!" );
 			set( "settings.status.configLocation", "data/status.json" );
 			set( "settings.status.img.goodImg", "data/img/good.png" );
 			set( "settings.status.img.badImg", "data/img/bad.png" );
 			set( "settings.status.img.unstableImg", "data/img/unstable.png" );
 		}
+		
+		if ( version < 3 ) {
+			Logger.getRootLogger().log( Level.FATAL, "Oudated config, sexy is not configured!" );
+			set( "settings.status.img.sexyImg", "data/img/sexy.png" );
+		}
 
 		statusConfigFile = getFile( "settings.status.configLocation", "data/status.json" );
 		goodFile = getFile( "settings.status.img.goodImg", "data/img/good.png" );
 		badFile = getFile( "settings.status.img.badImg", "data/img/bad.png" );
+		sexyFile = getFile( "settings.status.img.sexyImg", "data/img/sexy.png" );
 		unstableFile = getFile( "settings.status.img.unstableImg", "data/img/unstable.png" );
 
 	}

@@ -264,6 +264,9 @@ public class UUIDServlet extends HttpServlet
 					try {
 						int statusNumber = Integer.valueOf( statusStr );
 						switch ( statusNumber ) {
+							case -1:
+								status = Status.SEXY;
+								break;
 							case 0:
 								status = Status.GOOD;
 								break;
@@ -311,6 +314,10 @@ public class UUIDServlet extends HttpServlet
 
 					switch ( status ) {
 
+						case SEXY:
+							file = UUIDServletConfig.sexyFile;
+							break;
+							
 						case GOOD:
 							file = UUIDServletConfig.goodFile;
 							break;

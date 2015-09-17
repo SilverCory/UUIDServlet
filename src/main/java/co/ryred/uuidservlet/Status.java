@@ -7,6 +7,6 @@ package co.ryred.uuidservlet;
 public enum Status
 {
 
-	GOOD, BAD, EH
+	GOOD, BAD, EH, SEXY
 
 }
