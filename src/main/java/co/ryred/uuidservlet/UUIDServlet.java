@@ -101,6 +101,8 @@ public class UUIDServlet extends HttpServlet
 						bw.flush();
 						bw.close();
 
+						savingBuilds = false;
+
 					} catch ( Exception e ) {
 						e.printStackTrace();
 						savingBuilds = false;
@@ -133,6 +135,8 @@ public class UUIDServlet extends HttpServlet
 						bw.write( pretty_gson.toJson( UUIDServlet.users ) );
 						bw.flush();
 						bw.close();
+						
+						savingUsers = false;
 
 					} catch ( Exception e ) {
 						e.printStackTrace();
