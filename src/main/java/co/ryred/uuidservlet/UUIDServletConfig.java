@@ -28,6 +28,10 @@ public class UUIDServletConfig
 	public static boolean debug;
 	public static File dataLocation;
 	public static String password;
+	public static File goodFile;
+	public static File badFile;
+	public static File unstableFile;
+	public static File statusConfigFile;
 	static int version;
 	private static boolean initted = false;
 
@@ -60,8 +64,8 @@ public class UUIDServletConfig
 		config.options().header( HEADER );
 		config.options().copyDefaults( true );
 
-		version = getInt( "config-version", 1 );
-		set( "config-version", 1 );
+		version = getInt( "config-version", 2 );
+		set( "config-version", 2 );
 		readConfig( UUIDServletConfig.class, null );
 
 		Logger.getRootLogger().log( Level.INFO, "Configuration summary!" );
@@ -152,6 +156,22 @@ public class UUIDServletConfig
 		return config.getDouble( path, config.getDouble( path ) );
 	}
 
+	private static File getFile( String path, String def )
+	{
+
+		String fileLoc = getString( path, def );
+
+		if ( System.getProperty( "catalina.base" ) != null ) {
+			fileLoc = fileLoc.replace( "{HOME}", System.getProperty( "catalina.base" ) )
+					.replace( "/", File.separator );
+		}
+
+		File file = new File( fileLoc );
+		file.getParentFile().mkdirs();
+		return file;
+
+	}
+
 	private static void debug()
 	{
 		debug = getBoolean( "settings.debug", false );
@@ -165,15 +185,7 @@ public class UUIDServletConfig
 			set( "settings.data.configLocation", "{HOME}/data/UUIDData.json" );
 		}
 
-		String confLoc = getString( "settings.data.configLocation", "{HOME}/data/UUIDData.json" );
-
-		if ( System.getProperty( "catalina.base" ) != null ) {
-			confLoc = confLoc.replace( "{HOME}", System.getProperty( "catalina.base" ) )
-					.replace( "/", File.separator );
-		}
-
-		dataLocation = new File( confLoc );
-		dataLocation.getParentFile().mkdirs();
+		dataLocation = getFile( "settings.data.configLocation", "{HOME}/data/UUIDData.json" );
 
 	}
 
@@ -186,6 +198,24 @@ public class UUIDServletConfig
 		}
 
 		password = getString( "password", "password132" );
+
+	}
+
+	private static void statusSettings()
+	{
+
+		if ( version < 2 ) {
+			Logger.getRootLogger().log( Level.FATAL, "Oudated config, config is not configured!" );
+			set( "settings.status.configLocation", "data/status.json" );
+			set( "settings.status.img.goodImg", "data/img/good.png" );
+			set( "settings.status.img.badImg", "data/img/bad.png" );
+			set( "settings.status.img.unstableImg", "data/img/unstable.png" );
+		}
+
+		statusConfigFile = getFile( "settings.status.configLocation", "data/status.json" );
+		goodFile = getFile( "settings.status.img.goodImg", "data/img/good.png" );
+		badFile = getFile( "settings.status.img.badImg", "data/img/bad.png" );
+		unstableFile = getFile( "settings.status.img.unstableImg", "data/img/unstable.png" );
 
 	}
 

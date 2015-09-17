@@ -1,4 +1,4 @@
-package co.ryred.uuidservlet;
+package co.ryred.uuidservlet.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +21,17 @@ public class User
 	private String profile = null;
 	@Getter
 	private String reason = null;
+	@Getter
+	private String html = null;
 
-	public User( String name, UUID uuid, String profile, String reason )
+	public User( String name, UUID uuid, String profile, String reason, String html )
 	{
-		this( name, uuid.toString().replace( "-", "" ), profile, reason );
+		this( name, uuid.toString().replace( "-", "" ), profile, reason, html );
+	}
+
+	public User( String name, String uuid, String profile, String reason )
+	{
+		this( name, uuid.replace( "-", "" ), profile, reason, null );
 	}
 
 	/**
