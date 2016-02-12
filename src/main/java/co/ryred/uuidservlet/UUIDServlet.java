@@ -1,5 +1,6 @@
 package co.ryred.uuidservlet;
 
+import co.ryred.uuidservlet.configuration.file.YamlConfiguration;
 import co.ryred.uuidservlet.user.User;
 import co.ryred.uuidservlet.user.UserSerialisation;
 import com.google.gson.Gson;
@@ -29,6 +30,7 @@ public class UUIDServlet extends HttpServlet
 	private static final Gson pretty_gson = new GsonBuilder().registerTypeAdapter( User.class, new UserSerialisation() ).setPrettyPrinting().create();
 	private static final ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
 	private static final ConcurrentHashMap<String, Status> builds = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap.KeySetView<String, Boolean> ignore = ConcurrentHashMap.newKeySet();
 
 	private static boolean savingUsers = false;
 	private static boolean savingBuilds = false;
@@ -69,14 +71,27 @@ public class UUIDServlet extends HttpServlet
 
 		}
 
+		try {
+			File blackList = new File(UUIDServletConfig.dataLocation.getParentFile(), "blacklisted_ips.yml");
+			if (!blackList.exists()) {
+				blackList.createNewFile();
+			} else {
+				ignore.addAll(YamlConfiguration.loadConfiguration(blackList).getStringList("blocked-ips"));
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 		if ( UUIDServletConfig.statusConfigFile.exists() ) {
 			Type listType = new TypeToken<HashMap<String, Status>>() {}.getType();
-			builds.putAll( gson.fromJson( new FileReader( UUIDServletConfig.statusConfigFile ), listType ) );
+			builds.putAll(gson.fromJson(new FileReader(UUIDServletConfig.statusConfigFile), listType));
 		}
 		else {
 			builds.put( UUID.randomUUID().toString(), Status.EH );
 			saveBuilds();
 		}
+
+
 
 	}
 
@@ -155,6 +170,16 @@ public class UUIDServlet extends HttpServlet
 
 		response.setContentType( "application/json" );
 
+		String ipAddress = request.getHeader("X-FORWARDED-FOR");
+		if (ipAddress == null) {
+			ipAddress = request.getRemoteAddr();
+		}
+
+		if( ignore.contains( ipAddress ) ) {
+			response.getOutputStream().print("{}");
+			return;
+		}
+
 		String[] requestArr = request.getRequestURI().substring( 1 ).replace( "/", "\u5584" ).split( "\u5584" );
 		String command = "";
 
@@ -216,6 +241,16 @@ public class UUIDServlet extends HttpServlet
 	{
 
 		response.setContentType( "application/json" );
+
+		String ipAddress = request.getHeader("X-FORWARDED-FOR");
+		if (ipAddress == null) {
+			ipAddress = request.getRemoteAddr();
+		}
+
+		if( ignore.contains( ipAddress ) ) {
+			response.getOutputStream().print("{}");
+			return;
+		}
 
 		String[] requestArr = request.getRequestURI().substring( 1 ).replace( "/", "\u5584" ).split( "\u5584" );
 		String command = "";
